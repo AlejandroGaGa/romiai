@@ -11,17 +11,20 @@ import {
 import { CreatePatientDto } from './dto/create-patient.dto';
 import { UpdatePatientDto } from './dto/update-patient.dto';
 import { PatientsService } from './patients.service';
+import { PatientsSwagger } from './swagger/patients.swagger';
 
 @Controller('patients')
 export class PatientsController {
   constructor(private readonly patientsService: PatientsService) {}
 
   @Post()
+  @PatientsSwagger.create()
   async create(@Body() createPatientDto: CreatePatientDto) {
     return this.patientsService.create(createPatientDto);
   }
 
   @Get()
+  @PatientsSwagger.findAll()
   async findAll(@Query('page') page: string, @Query('limit') limit: string) {
     const pageInt = parseInt(page, 10);
     const limitInt = parseInt(limit, 10);
@@ -29,11 +32,13 @@ export class PatientsController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  @PatientsSwagger.findOne()
+  async findOne(@Param('id') id: string) {
     return this.patientsService.findOne(id);
   }
 
   @Patch(':id')
+  @PatientsSwagger.update()
   async update(
     @Param('id') id: string,
     @Body() updatePatientDto: UpdatePatientDto,
@@ -42,7 +47,8 @@ export class PatientsController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  @PatientsSwagger.remove()
+  async remove(@Param('id') id: string) {
     return this.patientsService.remove(id);
   }
 }
