@@ -1,9 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import { CreatePatientDto } from './dto/create-patient.dto';
 import { UpdatePatientDto } from './dto/update-patient.dto';
 import { Patient } from './entities/patient.entity';
+import { BadRequestErrorEnum } from 'src/enums/error.enum';
 
 @Injectable()
 export class PatientsService {
@@ -45,7 +46,7 @@ export class PatientsService {
   async findOne(id: string) {
     try {
       if (!Types.ObjectId.isValid(id)) {
-        throw new Error('ID inválido');
+        throw new BadRequestException(BadRequestErrorEnum.INVALID_ID);
       }
 
       const objectId = new Types.ObjectId(id);
@@ -61,7 +62,7 @@ export class PatientsService {
   async update(id: string, updatePatientDto: UpdatePatientDto) {
     try {
       if (!Types.ObjectId.isValid(id)) {
-        throw new Error('ID inválido');
+        throw new BadRequestException(BadRequestErrorEnum.INVALID_ID);
       }
 
       const objectId = new Types.ObjectId(id);
@@ -92,7 +93,7 @@ export class PatientsService {
   async remove(id: string) {
     try {
       if (!Types.ObjectId.isValid(id)) {
-        throw new Error('ID inválido');
+        throw new BadRequestException(BadRequestErrorEnum.INVALID_ID);
       }
       const objectId = new Types.ObjectId(id);
 
